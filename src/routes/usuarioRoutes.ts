@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import {usuarioController} from '../controllers/usuarioController';
+import { checkJwt } from '../middleware/jwt';
+import { checkRol } from '../middleware/roles';
 
 class UsuarioRoutes {
     public router: Router = Router();
@@ -9,8 +11,8 @@ class UsuarioRoutes {
     }
 
     config(): void {
-        this.router.get('/', usuarioController.lista);
-        this.router.put('/', usuarioController.insert);
+        this.router.get('/', [checkJwt, checkRol([1, 2])], usuarioController.lista);
+        this.router.put('/', [checkJwt, checkRol([1])],  usuarioController.insert);
     }
 }
 
