@@ -3,7 +3,7 @@ import pool from "../database/database";
 class UsuarioDAO {
     public async lista() {
         const result  = await pool.then(async (connection) => {
-            return await connection.query("SELECT cveUsuario, usuario, cveRol FROM usuario");
+            return await connection.query("SELECT u.cveUsuario, u.nombre, u.apellidos, u.username, u.fechaRegistro, u.cveRol, r.clave as rol FROM usuario u JOIN rol r ON r.cveRol = u.cveRol ORDER BY u.nombre, u.apellidos ASC");
         });
 
         return result;

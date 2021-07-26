@@ -9,8 +9,12 @@ class UsuarioController {
      *  Resultado: json con informacion de  usuarios registrados.
      */
     public async lista(req: Request, res: Response) {
-        const result = await dao.lista();
-        res.json(result);
+        try {
+            const result = await dao.lista();
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 
     /**
@@ -20,20 +24,20 @@ class UsuarioController {
      */
     public async insert(req: Request, res: Response) {
         try {
-            const { usuario, password, cveRol } = req.body;
+            const { username, password, cveRol, nombre, apellidos } = req.body;
 
             // Verificar parametros
-            if (usuario == null || password == null || cveRol == null) {
+            if (username == null || password == null || cveRol == null) {
                 return res.status(409).json({ message: "Los campos son requeridos" });
             }
 
             // Verificar longitud de caracteres
-            if(usuario.length > 150){
+            if(username.length > 150){
                 return res.status(500).json({message : "La longitud maxima del usuario es de 150 caracteres"});
             }
 
             // Verificar nombre de usuario
-            const verify = await dao.verificarUsuario(usuario);
+            const verify = await dao.verificarUsuario(username);
             if(verify.length > 0){
                 return res.status(500).json({message : "El usuario ya existe"});
             }
@@ -49,7 +53,9 @@ class UsuarioController {
 
             // Llamar objetos
             const user = {
-                usuario,
+                nombre,
+                apellidos,
+                username,
                 password: encryptedPassword,
                 cveRol
             }
