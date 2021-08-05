@@ -41,6 +41,15 @@ class UsuarioDAO {
         return result;
 
     }
+
+    public async delete(cveUsuario: number) {
+        const result = await pool.then(async (connection) => {
+            return await connection.query("DELETE FROM usuario WHERE cveUsuario = ?", [cveUsuario]);
+        });
+
+        return result;
+
+    }
 }
 
 export const dao = new UsuarioDAO();

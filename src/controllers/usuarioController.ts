@@ -94,6 +94,26 @@ class UsuarioController {
             res.status(500).json({ message: ex.message });
         }
     }
+
+    public async delete(req: Request, res: Response){
+        try {
+            const { cveUsuario } = req.params;
+
+            if(cveUsuario == null){
+                return res.status(400).json({ message : "No se puede eliminar" });
+            }
+
+            const result = await dao.delete(parseInt(cveUsuario));
+
+            if(result.affectedRows > 0){
+                res.json({ message : "Borrado exitosamente" })
+            } else  {
+                res.status(400).json({ message : result.message });
+            }
+        } catch (error) {
+            res.status(400).json({ message : error.message });
+        }
+    }
 }
 
 export const usuarioController = new UsuarioController();
