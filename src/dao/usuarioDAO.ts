@@ -32,6 +32,15 @@ class UsuarioDAO {
         return result;
         
     }
+
+    public async update(user: any) {
+        const result = await pool.then(async (connection) => {
+            return await connection.query("UPDATE usuario SET ? WHERE cveUsuario = ?", [user, user.cveUsuario]);
+        });
+
+        return result;
+
+    }
 }
 
 export const dao = new UsuarioDAO();

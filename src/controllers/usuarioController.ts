@@ -73,6 +73,27 @@ class UsuarioController {
             res.status(500).json({ message: ex.message });
         }
     }
+
+    public async update (req:  Request, res: Response){
+        try {
+            const usuario = req.body;
+
+            if(usuario.cveUsuario == null){
+                return res.status(400).json({ meesage : "No se puede actualizar" });
+            }
+
+            const result = await dao.update(usuario);
+
+            if(result.affectedRows > 0){
+                return res.json({ meesage : "Actualizado correctamente" });
+            } else  {
+                return res.status(400).json({ meesage : result.message });
+            }
+
+        } catch (ex) {
+            res.status(500).json({ message: ex.message });
+        }
+    }
 }
 
 export const usuarioController = new UsuarioController();
